@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receptionist</title>
+    <style>
+        body{
+            background-image:url('./ezbg.jpg');
+            background-size:cover;
+            background-repeat:no-repeat;
+        }
+        h1{
+
+            margin: 1em auto;
+            color:white;
+        }
+        button{
+            text-decoration: none;
+            font-family: 'Oswald', sans-serif;
+            color:white;
+            background-color:lightgreen;
+            border:none;
+            border-radius:10px;
+            padding: 15px 32px;
+            margin-top: 1em;
+        }
+        #app{
+            text-align: center;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 15vh;
+            padding: 20px;
+            background-color: gray;
+            width: 20%;
+            border-radius: 100px;
+        }
+        #app input{
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        #appointmentView{
+            text-align: center;
+            display: none;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 15vh;
+            padding: 20px;
+            background-color: gray;
+            width: 40%;
+            border-radius: 100px;
+        }
+        #medicalHistoryView{
+            text-align: center;
+            display: none;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 15vh;
+            padding: 20px;
+            background-color: gray;
+            width: 40%;
+            border-radius: 100px;
+        }        table{
+            font-family: Arial, Helvetica, sans-serif;
+            margin-right:auto;
+            margin-left:auto;
+        }
+        td, th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        tr:hover {background-color: #ddd;}
+        tr:nth-child(even){background-color: #f2f2f2;}
+        tr:nth-child(odd){background-color: #d1d1d1;}
+        th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #04AA6D;
+            color: white;
+            }
+
+    </style>
+</head>
+<body>
+    <div id="app">
+    <h1>Patients</h1>
+    <input type="text" id="sinInput" placeholder="Enter SIN">
+    <button id="sinButton">set SIN</button>
+    <button id="viewAppointments">View My Appointment</button>
+    <button id="viewMedicalHistory">View My Medical History</button>
+    </div>
+    <div id="appointmentView">
+        <button id="backAppt">Back</button>
+        <table id="appointmentTable">
+            <tr>
+                <th>Date</th>
+                <th>Start Time</th>
+                <th>Doctor</th>
+                <th>Room</th>
+            </tr>
+        </table>
+    </div>
+    <div id="medicalHistoryView">
+        <button id="backMedical">Back</button>
+        <table id="medicalHistoryTable">
+            <tr>
+                <th>Description</th>
+            </tr>
+        </table>
+    </div>
+</body>
+<script>
+    socket = new WebSocket("ws://localhost:4000");
+    var sin = "";
+    var sinInput = document.getElementById("sinInput");
+    var sinButton = document.getElementById("sinButton");
+    sinButton.addEventListener("click", function(){
+        sin = sinInput.value;
+    });
+    var viewAppointments = document.getElementById("viewAppointments");
+    var viewMedicalHistory = document.getElementById("viewMedicalHistory");
+    var backMedical = document.getElementById("backMedical");
+    var backAppt = document.getElementById("backAppt");
+    backAppt.addEventListener("click", function(){
+        document.getElementById("appointmentView").style.display = "none";
+        document.getElementById("app").style.display = "block";
+    });
+    backMedical.addEventListener("click", function(){
+        document.getElementById("medicalHistoryView").style.display = "none";
+        document.getElementById("app").style.display = "block";
+    });
+    viewAppointments.addEventListener("click",function(){
+        document.getElementById("appointmentView").style.display = "block";
+        document.getElementById("app").style.display = "none";
+        socket.send(JSON.stringify({
+            "type":"appointmentPatient",
+            "sin":sin
+        }))
+    });
+    viewMedicalHistory.addEventListener("click",function(){
+        document.getElementById("medicalHistoryView").style.display = "block";
+        document.getElementById("app").style.display = "none";
+        socket.send(JSON.stringify({
+            "type":"medicalHistoryPatient",
+            "sin":sin
+        }))
+    });
+
+    socket.addEventListener("message",function(event){
+        var data = JSON.parse(event.data);
+        if (data.type=="appointments"){
+            var table = document.getElementById("appointmentTable");
+            var appointments = JSON.parse(data.appointments);
+            while (table.rows.length > 1) {
+                table.deleteRow(1);
+            }
+            for (var i = 0; i < appointments.length; i++){
+                var row = table.insertRow(i+1);
+                var date = row.insertCell(0);
+                var startTime = row.insertCell(1);
+                var doctor = row.insertCell(2);
+                var room = row.insertCell(3);
+                date.innerHTML = appointments[i][2];
+                startTime.innerHTML = appointments[i][3];
+                doctor.innerHTML = appointments[i][9] + " " + appointments[i][10];
+                room.innerHTML = appointments[i][7];
+            }
+        }
+        if (data.type=="medicalhistory"){
+            var medicalHistory = JSON.parse(data.medicalhistory);
+            var medicalHistoryTable = document.getElementById("medicalHistoryTable");
+            while (medicalHistoryTable.rows.length > 1) {
+                table.deleteRow(1);
+            }
+            for (hist of medicalHistory){
+                var row = medicalHistoryTable.insertRow();
+                var description = row.insertCell();
+                description.innerHTML = hist[1];
+            }
+        }
+    })
+</script>
+</html>

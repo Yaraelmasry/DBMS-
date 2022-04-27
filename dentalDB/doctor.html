@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dentist</title>
+    <style>
+        body{
+            background-image:url('./ezbg.jpg');
+            background-size:cover;
+            background-repeat:no-repeat;
+        }
+        h1{
+
+            margin: 1em auto;
+            color:white;
+        }
+        button{
+            text-decoration: none;
+            font-family: 'Oswald', sans-serif;
+            color:white;
+            background-color:lightgreen;
+            border:none;
+            border-radius:10px;
+            padding: 15px 32px;
+            margin-top: 1em;
+        }
+        #app{
+            text-align: center;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 15vh;
+            padding: 20px;
+            background-color: gray;
+            width: 20%;
+            border-radius: 100px;
+        }
+        #patientView{
+            display:none;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 15vh;
+            padding: 20px;
+            background-color: gray;
+            width: 70%;
+            border-radius: 100px;
+        }
+        #addPatientView{
+            display:none;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 15vh;
+            padding: 20px;
+            background-color: gray;
+            width: 20%;
+            border-radius: 100px;
+        }
+        #appointmentView{
+            display:none;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 15vh;
+            padding: 20px;
+            background-color: gray;
+            width: 60%;
+            border-radius: 100px;
+        }
+        #addPatientView input{
+            display:block;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+            
+        }
+        #medicalHistoryView{
+            display:none;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 15vh;
+            padding: 20px;
+            background-color: gray;
+            width: 60%;
+            border-radius: 100px;
+        }
+        #medicalHistoryView table{
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 15vh;
+            padding: 20px;
+            background-color: gray;
+            width: 60%;
+            border-radius: 100px;
+        }
+        #addMedicalHistory{
+            display:none;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 15vh;
+            padding: 20px;
+            background-color: gray;
+            width: 60%;
+            border-radius: 100px;
+        }
+        #addMedicalHistory input{
+            display:block;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+            
+        }
+        table{
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        td, th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        tr:hover {background-color: #ddd;}
+        tr:nth-child(even){background-color: #f2f2f2;}
+        tr:nth-child(odd){background-color: #d1d1d1;}
+        th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #04AA6D;
+            color: white;
+            }
+    </style>
+</head>
+<body>
+    <div id="app">
+    <h1>Dentist</h1>
+    <button id="appointmentsViewButton">View Upcoming Appointments</button>
+    <button id="patientViewButtonDoctor">View Patients</button>
+    <button id="medicalHistoryButton">View Medical Histories</button>
+    </div>
+    <div id="patientView">
+        <h1>Patients</h1>
+        <button id="backButton">Back</button>
+        <table id="patientTable">
+            <tr>
+                <th>Patient Name</th>
+                <th>Patient Address</th>
+                <th>Patient Pronouns</th>
+                <th>Patient Gender</th>
+                <th>Patient SIN</th>
+                <th>Patient Date of Birth</th>
+                <th>Patient Phone</th>
+                <th>Patient Email</th>
+            </tr>
+        </table>
+    </div>
+    <div id="appointmentView">
+        <h1>Upcoming Appointments</h1>
+        <button id="backButtonAppointment">Back</button>
+        <table id="appointmentTable">
+            <tr>
+                <th>Dentist Name</th>
+                <th>Patient Name</th>
+                <th>Patient Pronouns</th>
+                <th>Date</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Room</th>
+            </tr>
+        </table>
+    </div>
+    <div id="medicalHistoryView">
+        <h1>Patient History</h1>
+        <button id="backButtonMedicalHistory">Back</button>
+        <table id="medicalHistoryTable">
+            <tr>
+                <th>Patient Name</th>
+                <th>Description</th>
+            </tr>
+        </table>
+        <button id="addMedicalHistoryButton">Add Medical History</button>
+    </div>
+    <div id="addMedicalHistory">
+        <h1>Add Medical History</h1>
+        <button id="backButtonAddMedicalHistory">Back</button>
+        <input type="text" id="patientSin" placeholder="Patient SIN">
+        <input type="text" id="description" placeholder="Description">
+        <button id="submitMedicalHistoryButton">Add Medical History</button>
+    </div>
+
+</body>
+<script>
+    socket = new WebSocket("ws://localhost:4000");
+
+    var medicalHistoryButton = document.getElementById("medicalHistoryButton");
+    medicalHistoryButton.addEventListener("click", function(){
+        document.getElementById("app").style.display = "none";
+        document.getElementById("medicalHistoryView").style.display = "block";
+        socket.send(JSON.stringify({type: "medicalhistory"}));
+    });
+    var addMedicalHistoryButton = document.getElementById("addMedicalHistoryButton");
+    addMedicalHistoryButton.addEventListener("click", function(){
+        document.getElementById("medicalHistoryView").style.display = "none";
+        document.getElementById("addMedicalHistory").style.display = "block";
+    });
+    var submitMedicalHistoryButton = document.getElementById("submitMedicalHistoryButton");
+    submitMedicalHistoryButton.addEventListener("click", function(){
+        var patientSin = document.getElementById("patientSin").value;
+        var description = document.getElementById("description").value;
+        socket.send(JSON.stringify({type: "addmedicalhistory", patientSin: patientSin, description: description}));
+    });
+    var backButtonMedicalHistory = document.getElementById("backButtonMedicalHistory");
+    backButtonMedicalHistory.addEventListener("click", function(){
+        document.getElementById("app").style.display = "block";
+        document.getElementById("medicalHistoryView").style.display = "none";
+    });
+    var backButtonAddMedicalHistory = document.getElementById("backButtonAddMedicalHistory");
+    backButtonAddMedicalHistory.addEventListener("click", function(){
+        document.getElementById("addMedicalHistory").style.display = "none";
+        document.getElementById("medicalHistoryView").style.display = "block";
+    });
+    patientViewButtonDoctor = document.getElementById("patientViewButtonDoctor");
+    var backButtonAppointment = document.getElementById("backButtonAppointment");
+    backButtonAppointment.addEventListener("click", function(){
+        document.getElementById("appointmentView").style.display = "none";
+        document.getElementById("app").style.display = "block";
+    });
+    var appointmentsViewButton = document.getElementById("appointmentsViewButton");
+    appointmentsViewButton.addEventListener("click", function(){
+        document.getElementById("app").style.display = "none";
+        document.getElementById("appointmentView").style.display = "block";
+        socket.send(JSON.stringify({type:"appointments"}));
+    });
+    var backButton = document.getElementById("backButton");
+    backButton.addEventListener("click", function(){
+            document.getElementById("patientView").style.display = "none";
+            document.getElementById("app").style.display = "block";
+    });
+
+    patientViewButtonDoctor.addEventListener("click", function(){
+        socket.send(JSON.stringify({
+            type: "patients"
+        }));
+    });
+    socket.addEventListener("message", function(event){
+        var data = JSON.parse(event.data);
+        if(data.type == "patientView"){
+            document.getElementById("app").style.display = "none";
+            document.getElementById("patientView").style.display = "block";
+            var table = document.getElementById("patientTable");
+            // Remove all rows but the first
+            while (table.rows.length > 1) {
+                table.deleteRow(1);
+            }
+            for (patient of JSON.parse(data.patients)){
+                var row = table.insertRow();
+                var nameCell = row.insertCell();
+                nameCell.innerHTML = patient[1] + " " +patient[2] + " " + patient[3];
+                var addressCell = row.insertCell();
+                addressCell.innerHTML = patient[6] + " " + patient[7] + ", " + patient[8] + ", " + patient[9] + ", " + patient[10];
+                var pronounCell = row.insertCell();
+                pronounCell.innerHTML = patient[5];
+                var genderCell = row.insertCell();
+                genderCell.innerHTML = patient[11];
+                var ssnCell = row.insertCell();
+                ssnCell.innerHTML = patient[0];
+                var dobCell = row.insertCell();
+                dobCell.innerHTML = patient[4];
+                var phoneCell = row.insertCell();
+                phoneCell.innerHTML = patient[13];
+                var emailCell = row.insertCell();
+                emailCell.innerHTML = patient[12];
+            }
+        }
+        if (data.type == "appointments"){
+            var table = document.getElementById("appointmentTable");
+            // Remove all rows but the first
+            while (table.rows.length > 1) {
+                table.deleteRow(1);
+            }
+            for (appointment of JSON.parse(data.appointments)){
+                var row = table.insertRow();
+                row.dataset.dentistSin = appointment[1];
+                row.dataset.patientSin = appointment[0];
+                var drNameCell = row.insertCell();
+                drNameCell.innerHTML = appointment[23] + " " + appointment[24] + " " + appointment[25];
+                var ptNameCell = row.insertCell();
+                ptNameCell.innerHTML = appointment[9] + " " + appointment[10] + " " + appointment[11];
+                var ptPronouns = row.insertCell();
+                ptPronouns.innerHTML = appointment[13];
+                var dateCell = row.insertCell();
+                dateCell.innerHTML = appointment[2];
+                var startTime = row.insertCell();
+                startTime.innerHTML = appointment[3];
+                var endTime = row.insertCell();
+                endTime.innerHTML = appointment[4];
+                var type = row.insertCell();
+                type.innerHTML = appointment[5];
+                var status = row.insertCell();
+                status.innerHTML = appointment[6];
+                var room = row.insertCell();
+                room.innerHTML = appointment[7];
+
+            }
+        }
+        if (data.type == "medicalhistory"){
+            var table = document.getElementById("medicalHistoryTable");
+            // Remove all rows but the first
+            while (table.rows.length > 1) {
+                table.deleteRow(1);
+            }
+            for (medH of JSON.parse(data.medicalhistory)){
+                var row = table.insertRow();
+                var ptNameCell = row.insertCell();
+                ptNameCell.innerHTML = medH[3] + " " + medH[4] + " " + medH[5];
+                var description = row.insertCell();
+                description.innerHTML = medH[1];
+            }
+        }
+    });
+</script>
+</html>

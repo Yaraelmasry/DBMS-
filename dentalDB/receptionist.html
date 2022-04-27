@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receptionist</title>
+    <style>
+        body{
+            background-image:url('./ezbg.jpg');
+            background-size:cover;
+            background-repeat:no-repeat;
+        }
+        h1{
+
+            margin: 1em auto;
+            color:white;
+        }
+        button{
+            text-decoration: none;
+            font-family: 'Oswald', sans-serif;
+            color:white;
+            background-color:lightgreen;
+            border:none;
+            border-radius:10px;
+            padding: 15px 32px;
+            margin-top: 1em;
+        }
+        #app{
+            text-align: center;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 15vh;
+            padding: 20px;
+            background-color: gray;
+            width: 20%;
+            border-radius: 100px;
+        }
+        #patientView{
+            display:none;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 15vh;
+            padding: 20px;
+            background-color: gray;
+            width: 70%;
+            border-radius: 100px;
+        }
+        #employeeView{
+            display:none;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 15vh;
+            padding: 20px;
+            background-color: gray;
+            width: 70%;
+            border-radius: 100px;
+        }
+        #appointmentView{
+            display:none;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 15vh;
+            padding: 20px;
+            background-color: gray;
+            width: 70%;
+            border-radius: 100px;
+        }
+        #addPatientView{
+            display:none;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 15vh;
+            padding: 20px;
+            background-color: gray;
+            width: 20%;
+            border-radius: 100px;
+        }
+        #addAppointmentView{
+            display:none;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 15vh;
+            padding: 20px;
+            background-color: gray;
+            width: 20%;
+            border-radius: 100px;
+        }
+        #addPatientView select{
+            display:block;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        #addAppointmentView input{
+            display:block;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        #addPatientView input{
+            display:block;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+            
+        }
+        table{
+            font-family: Arial, Helvetica, sans-serif;
+            margin-right:auto;
+            margin-left:auto;
+        }
+        td, th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        tr:hover {background-color: #ddd;}
+        tr:nth-child(even){background-color: #f2f2f2;}
+        tr:nth-child(odd){background-color: #d1d1d1;}
+        th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #04AA6D;
+            color: white;
+            }
+    </style>
+</head>
+<body>
+    <div id="app">
+    <h1>Receptionist</h1>
+    <button id="appointmentViewButton">View Upcoming Appointments</button>
+    <button id="patientViewButtonDoctor">View Patients</button>
+    <button id="employeeViewButton">View Employees</button>
+    </div>
+    <div id="employeeView">
+        <button id="backEmployeeViewButton">Back</button>
+        <h1>Employees</h1>
+        <select id="roleViewSelect">
+            <option value="dentist">Dentist</option>
+            <option value="receptionist">Receptionist</option>
+        </select>
+        <input id="branchFilter" type="text" placeholder="Filter by Branch">
+        <table id="employeeTable">
+            <tr>
+                <th>Employee Name</th>
+                <th>Role</th>
+                <th>Salary</th>
+                <th>Branch</th>
+            </tr>
+        </table>
+        <button id="addEmployeeButton">Add Employee</button>
+    </div>
+    <div id="patientView">
+        <h1>Patients</h1>
+        <button id="backButton">Back</button>
+        <table id="patientTable">
+            <tr>
+                <th>Patient Name</th>
+                <th>Patient Address</th>
+                <th>Patient Pronouns</th>
+                <th>Patient Gender</th>
+                <th>Patient SIN</th>
+                <th>Patient Date of Birth</th>
+                <th>Patient Phone</th>
+                <th>Patient Email</th>
+            </tr>
+        </table>
+        <button id="addPatient">New Patient</button>
+    </div>
+    <div id="addPatientView">
+        <h1 id="addPtHeader">Add Patient</h1>
+        <button id="backButtonBtn">Back</button>
+        <input type="text" id="patientFirstName" placeholder="First Name"></input>
+        <input type="text" id="patientMiddleName" placeholder="Middle Name"></input>
+        <input type="text" id="patientLastName" placeholder="Last Name"></input>
+        <input type="text" id="patientPronouns" placeholder="Pronouns"></input>
+        <input type="text" id="patientHouseNumber" placeholder="House Number"></input>
+        <input type="text" id="patientStreet" placeholder="Steet"></input>
+        <input type="text" id="patientCity" placeholder="City"></input>
+        <select id="patientProvince">
+            <option value="AB">Alberta</option>
+            <option value="BC">British Columbia</option>
+            <option value="MB">Manitoba</option>
+            <option value="NB">New Brunswick</option>
+            <option value="NL">Newfoundland and Labrador</option>
+            <option value="NS">Nova Scotia</option>
+            <option value="ON">Ontario</option>
+            <option value="PE">Prince Edward Island</option>
+            <option value="QC">Quebec</option>
+            <option value="SK">Saskatchewan</option>
+            <option value="NT">Northwest Territories</option>
+            <option value="NU">Nunavut</option>
+            <option value="YT">Yukon</option>
+        </select>
+        <input type="text" id="patientGender" placeholder="Gender Identity"></input>
+        <input type="text" id="patientSin" placeholder="sinNumber"></input>
+        <input type="text" id="patientDateOfBirth" placeholder="1900-01-01"></input>
+        <input type="text" id="patientPhone" placeholder="Phone Number"></input>
+        <input type="text" id="patientPostal" placeholder="A1A 1A1"></input>
+        <input type="text" id="patientEmail" placeholder="Email"></input>
+        <input type="text" id="patientInsuranceProvider" placeholder="Insurance Provider"></input>
+        <input type="text" id="patientInsuranceNumber" placeholder="Insurance Plan Code"></input>
+        <input type="text" id="guardianSin" placeholder="Guardian SIN (opt)"></input>
+        <select id="roleSelectionDrop">
+            <option value="dentist">Dentist</option>
+            <option value="receptionist">Receptionist</option>
+            <option value="admin">Admin</option>
+        </select>
+        <button id="submitPatient">Add Patient</button>
+    </div>
+    <div id="appointmentView">
+        <h1>Upcoming Appointments</h1>
+        <button id="backButtonAppointment">Back</button>
+        <table id="appointmentTable">
+            <tr>
+                <th>Dentist Name</th>
+                <th>Patient Name</th>
+                <th>Patient Pronouns</th>
+                <th>Date</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Room</th>
+            </tr>
+        </table>
+        <button id="newappointment">Book Appointment</button>
+    </div>
+    <div id="addAppointmentView">
+        <h1>Book Appointment</h1>
+        <button id="backButtonBtnAppointment">Back</button>
+        <input type="text" id="patientSinAppointment" placeholder="Patient SIN"></input>
+        <input type="text" id="doctorSinAppointment" placeholder="Doctor SIN"></input>
+        <input type="text" id="dateAppointment" placeholder="1900-01-01"></input>
+        <input type="text" id="startTimeAppointment" placeholder="00:00"></input>
+        <input type="text" id="endTimeAppointment" placeholder="00:00"></input>
+        <input type="text" id="appointmentTypeAppointment" placeholder="Type"></input>
+        <input type="text" id="appointmentStatusAppointment" placeholder="Status"></input>
+        <input type="text" id="roomAssignedAppointment" placeholder="Room"></input>
+        <button id="submitAppointment">Book Appointment</button>
+    </div>
+</body>
+<script>
+    socket = new WebSocket("ws://localhost:4000");
+    patientViewButtonDoctor = document.getElementById("patientViewButtonDoctor");
+    var newPatientButton = document.getElementById("addPatient");
+    var appointmentViewButton = document.getElementById("appointmentViewButton");
+    var employeeViewButton = document.getElementById("employeeViewButton");
+    var backEmployeeViewButton = document.getElementById("backEmployeeViewButton");
+    var addEmployeeButton = document.getElementById("addEmployeeButton");
+    employeeViewButton.addEventListener("click", function(){
+        document.getElementById("employeeView").style.display = "block";
+        document.getElementById("app").style.display = "none";
+        document.getElementById("branchFilter").value = "";
+        socket.send(JSON.stringify({
+            "type": "employees"
+        }));
+    });
+    backEmployeeViewButton.addEventListener("click", function(){
+        document.getElementById("employeeView").style.display = "none";
+        document.getElementById("app").style.display = "block";
+    });
+    addEmployeeButton.addEventListener("click", function(){
+        document.getElementById("addPtHeader").innerHTML = "Add Employee";
+        document.getElementById("addPatientView").style.display = "block";
+        document.getElementById("employeeView").style.display = "none";
+        document.getElementById("app").style.display = "none";
+        document.getElementById("patientInsuranceProvider").style.display = "none";
+        document.getElementById("patientInsuranceNumber").placeholder = "Branch ID"
+        document.getElementById("guardianSin").placeholder = "Salary"
+        document.getElementById("roleSelectionDrop").style.display = "block";
+        document.getElementById("submitPatient").innerHTML = "Add Employee";
+        
+    });
+    newPatientButton.addEventListener("click", function(){
+        document.getElementById("addPtHeader").innerHTML = "Add Patient";
+        document.getElementById("patientView").style.display = "none";
+        document.getElementById("app").style.display = "none";
+        document.getElementById("addPatientView").style.display = "block";
+        document.getElementById("submitPatient").innerHTML = "Add Patient";
+        document.getElementById("patientInsuranceProvider").style.display = "block";
+        document.getElementById("patientInsuranceNumber").placeholder = "Insurance Plan Code"
+        document.getElementById("guardianSin").placeholder = "Guardian SIN (opt)"
+        document.getElementById("roleSelectionDrop").style.display = "none";
+    });
+    appointmentViewButton.addEventListener("click", function(){
+        document.getElementById("patientView").style.display = "none";
+        document.getElementById("app").style.display = "none";
+        document.getElementById("appointmentView").style.display = "block";
+        socket.send(JSON.stringify({type:"appointments"}));
+    });
+    var backButtonAppointment = document.getElementById("backButtonAppointment");
+    backButtonAppointment.addEventListener("click", function(){
+        document.getElementById("app").style.display = "block";
+        document.getElementById("appointmentView").style.display = "none";
+    });
+    var backButtonBtnAppointment = document.getElementById("backButtonBtnAppointment");
+    backButtonBtnAppointment.addEventListener("click", function(){
+        document.getElementById("appointmentView").style.display = "block";
+        document.getElementById("addAppointmentView").style.display = "none";
+    });
+    var bookButtonAppointmentButton = document.getElementById("newappointment");
+    bookButtonAppointmentButton.addEventListener("click", function(){
+        document.getElementById("app").style.display = "none";
+        document.getElementById("appointmentView").style.display = "none";
+        document.getElementById("addAppointmentView").style.display = "block";
+    });
+    var submitAppointment = document.getElementById("submitAppointment");
+    submitAppointment.addEventListener("click", function(){
+        var patientSinAppointment = document.getElementById("patientSinAppointment").value;
+        var doctorSinAppointment = document.getElementById("doctorSinAppointment").value;
+        var dateAppointment = document.getElementById("dateAppointment").value;
+        var startTimeAppointment = document.getElementById("startTimeAppointment").value;
+        var endTimeAppointment = document.getElementById("endTimeAppointment").value;
+        var appointmentTypeAppointment = document.getElementById("appointmentTypeAppointment").value;
+        var appointmentStatusAppointment = document.getElementById("appointmentStatusAppointment").value;
+        var roomAssignedAppointment = document.getElementById("roomAssignedAppointment").value;
+        if (submitAppointment.innerHTML == "Update Appointment"){
+            var appointment = {
+            type: "updateappointment",
+            patientSin: patientSinAppointment,
+            doctorSin: doctorSinAppointment,
+            date: dateAppointment,
+            startTime: startTimeAppointment,
+            endTime: endTimeAppointment,
+            appointmentType: appointmentTypeAppointment,
+            appointmentStatus: appointmentStatusAppointment,
+            roomAssigned: roomAssignedAppointment
+            
+        };
+        socket.send(JSON.stringify(appointment));
+        }else{
+        var appointment = {
+            type: "newappointment",
+            patientSin: patientSinAppointment,
+            doctorSin: doctorSinAppointment,
+            date: dateAppointment,
+            startTime: startTimeAppointment,
+            endTime: endTimeAppointment,
+            type: appointmentTypeAppointment,
+            status: appointmentStatusAppointment,
+            room: roomAssignedAppointment
+        };
+        socket.send(JSON.stringify(appointment));
+    }
+    });
+    var submitPatientButton = document.getElementById("submitPatient");
+    submitPatientButton.addEventListener("click",function(){
+        var patientFirstName = document.getElementById("patientFirstName").value;
+        var patientMiddleName = document.getElementById("patientMiddleName").value;
+        var patientLastName = document.getElementById("patientLastName").value;
+        var patientPronouns = document.getElementById("patientPronouns").value;
+        var patientHouseNumber = document.getElementById("patientHouseNumber").value;
+        var patientStreet = document.getElementById("patientStreet").value;
+        var patientCity = document.getElementById("patientCity").value;
+        var patientProvince = document.getElementById("patientProvince").value;
+        var patientGender = document.getElementById("patientGender").value;
+        var patientSin = document.getElementById("patientSin").value;
+        var patientDateOfBirth = document.getElementById("patientDateOfBirth").value;
+        var patientPhone = document.getElementById("patientPhone").value;
+        var patientEmail = document.getElementById("patientEmail").value;
+        var patientPostal = document.getElementById("patientPostal").value;
+        var patientInsuranceProvider = document.getElementById("patientInsuranceProvider").value;
+        var patientInsuranceNumber = document.getElementById("patientInsuranceNumber").value;
+        var guardianSin = document.getElementById("guardianSin").value;
+        if (submitPatientButton.innerHTML == "Add Patient"){
+            var patient = {
+                type:"newpatient",
+                "firstName": patientFirstName,
+                "middleName": patientMiddleName,
+                "lastName": patientLastName,
+                "pronouns": patientPronouns,
+                "houseNumber": patientHouseNumber,
+                "street": patientStreet,
+                "city": patientCity,
+                "province": patientProvince,
+                "gender": patientGender,
+                "ssn": patientSin,
+                "dateOfBirth": patientDateOfBirth,
+                "phoneNumber": patientPhone,
+                "postalCode": patientPostal,
+                "email": patientEmail,
+                "insuranceProvider":patientInsuranceProvider,
+                "insurancePlanCode":patientInsuranceNumber,
+                "guardianSin":guardianSin
+            };
+         socket.send(JSON.stringify(patient));
+        }
+        else if (submitPatientButton.innerHTML == "Update Patient"){
+            var patient = {
+                type:"updatepatient",
+                "firstName": patientFirstName,
+                "middleName": patientMiddleName,
+                "lastName": patientLastName,
+                "pronouns": patientPronouns,
+                "houseNumber": patientHouseNumber,
+                "street": patientStreet,
+                "city": patientCity,
+                "province": patientProvince,
+                "gender": patientGender,
+                "ssn": patientSin,
+                "dateOfBirth": patientDateOfBirth,
+                "phoneNumber": patientPhone,
+                "postalCode": patientPostal,
+                "email": patientEmail,
+                "insuranceProvider":patientInsuranceProvider,
+                "insurancePlanCode":patientInsuranceNumber,
+                "guardianSin":guardianSin
+            }
+            socket.send(JSON.stringify(patient));
+        }
+        else if (submitPatientButton.innerHTML == "Add Employee"){
+            var role = document.getElementById("roleSelectionDrop").value;
+            var employee = {
+                type:"newemployee",
+                "firstName": patientFirstName,
+                "middleName": patientMiddleName,
+                "lastName": patientLastName,
+                "pronouns": patientPronouns,
+                "houseNumber": patientHouseNumber,
+                "street": patientStreet,
+                "city": patientCity,
+                "province": patientProvince,
+                "gender": patientGender,
+                "ssn": patientSin,
+                "dateOfBirth": patientDateOfBirth,
+                "phoneNumber": patientPhone,
+                "postalCode": patientPostal,
+                "email": patientEmail,
+                "branchID":patientInsuranceNumber,
+                "salary":guardianSin,
+                "role":role
+               }
+            socket.send(JSON.stringify(employee));
+        }
+        document.getElementById("patientFirstName").value = "";
+        document.getElementById("patientMiddleName").value = "";
+        document.getElementById("patientLastName").value = "";
+        document.getElementById("patientPronouns").value = "";
+        document.getElementById("patientHouseNumber").value = "";
+        document.getElementById("patientStreet").value = "";
+        document.getElementById("patientCity").value = "";
+        document.getElementById("patientProvince").value = "";
+        document.getElementById("patientGender").value = "";
+        document.getElementById("patientSin").value = "";
+        document.getElementById("patientDateOfBirth").value = "";
+        document.getElementById("patientPhone").value = "";
+        document.getElementById("patientPostal").value = "";
+        document.getElementById("patientEmail").value = "";
+
+    });
+
+    var backButton = document.getElementById("backButton");
+    backButton.addEventListener("click", function(){
+            document.getElementById("patientView").style.display = "none";
+            document.getElementById("app").style.display = "block";
+    });
+    var backButtonBtn = document.getElementById("backButtonBtn");
+    backButtonBtn.addEventListener("click", function(){
+            document.getElementById("addPatientView").style.display = "none";
+            document.getElementById("patientView").style.display = "block";
+            socket.send(JSON.stringify({type:"patients"}));
+    });
+    var branchFilter = document.getElementById("branchFilter");
+    var roleViewSelect  = document.getElementById("roleViewSelect");
+    roleViewSelect.addEventListener("change",function(){
+        var branchID = branchFilter.value;
+        var role = document.getElementById("roleViewSelect").value;
+        var table = document.getElementById("employeeTable");
+        for (var i = table.rows.length - 1; i > 0; i--) {
+            let row = table.rows[i];
+            if (row.cells[3].innerHTML != branchID || role != row.cells[1].innerHTML){
+                row.style.display = "none";
+            }
+            else{
+                row.style.display = "table-row";
+            }
+        }
+    });
+    branchFilter.addEventListener("change", function(){
+        var branchID = branchFilter.value;
+        var role = document.getElementById("roleViewSelect").value;
+        var table = document.getElementById("employeeTable");
+        for (var i = table.rows.length - 1; i > 0; i--) {
+            let row = table.rows[i];
+            if (row.cells[3].innerHTML != branchID || role != row.cells[1].innerHTML){
+                row.style.display = "none";
+            }
+            else{
+                row.style.display = "table-row";
+            }
+        }
+    });
+    patientViewButtonDoctor.addEventListener("click", function(){
+        socket.send(JSON.stringify({
+            type: "patients"
+        }));
+    });
+    socket.addEventListener("message", function(event){
+        var data = JSON.parse(event.data);
+        if(data.type == "patientView"){
+            document.getElementById("app").style.display = "none";
+            document.getElementById("patientView").style.display = "block";
+            var table = document.getElementById("patientTable");
+            // Remove all rows but the first
+            while (table.rows.length > 1) {
+                table.deleteRow(1);
+            }
+            for (patient of JSON.parse(data.patients)){
+                var row = table.insertRow();
+                var nameCell = row.insertCell();
+                nameCell.innerHTML = patient[1] + " " +patient[2] + " " + patient[3];
+                var addressCell = row.insertCell();
+                addressCell.innerHTML = patient[6] + " " + patient[7] + ", " + patient[8] + ", " + patient[9] + ", " + patient[10];
+                var pronounCell = row.insertCell();
+                pronounCell.innerHTML = patient[5];
+                var genderCell = row.insertCell();
+                genderCell.innerHTML = patient[11];
+                var ssnCell = row.insertCell();
+                ssnCell.innerHTML = patient[0];
+                var dobCell = row.insertCell();
+                dobCell.innerHTML = patient[4];
+                var phoneCell = row.insertCell();
+                phoneCell.innerHTML = patient[13];
+                var emailCell = row.insertCell();
+                emailCell.innerHTML = patient[12];
+            }
+            // Interate through the table and add a click event to each row
+            for (var i = 1; i < table.rows.length; i++) {
+                table.rows[i].addEventListener("click", function(){
+                    // Switch to the add patient view, populate the fields with the patient data
+                    document.getElementById("patientView").style.display = "none";
+                    document.getElementById("app").style.display = "none";
+                    document.getElementById("addPatientView").style.display = "block";
+
+                    firstName = this.cells[0].innerHTML.split(" ")[0];
+                    middleName = this.cells[0].innerHTML.split(" ")[1];
+                    lastName = this.cells[0].innerHTML.split(" ")[2];
+                    document.getElementById("patientFirstName").value = firstName
+                    document.getElementById("patientMiddleName").value = middleName
+                    document.getElementById("patientLastName").value = lastName
+                    document.getElementById("patientPronouns").value = this.cells[2].innerHTML;
+                    document.getElementById("patientHouseNumber").value = this.cells[1].innerHTML.split(" ")[0];
+                    document.getElementById("patientStreet").value = this.cells[1].innerHTML.split(" ")[1].slice(0,-1);
+                    document.getElementById("patientCity").value = this.cells[1].innerHTML.split(", ")[1];
+                    document.getElementById("patientProvince").value = this.cells[1].innerHTML.split(", ")[2];
+                    document.getElementById("patientGender").value = this.cells[3].innerHTML;
+                    document.getElementById("patientSin").value = this.cells[4].innerHTML;
+                    document.getElementById("patientDateOfBirth").value = this.cells[5].innerHTML;
+                    document.getElementById("patientPhone").value = this.cells[6].innerHTML;
+                    document.getElementById("patientPostal").value = this.cells[1].innerHTML.split(", ")[3];
+                    document.getElementById("patientEmail").value = this.cells[7].innerHTML;
+                    document.getElementById("submitPatient").innerHTML = "Update Patient";
+                    document.getElementById("roleSelectionDrop").style.display = "none";
+                });
+            }
+        }
+        if (data.type == "appointments"){
+            var table = document.getElementById("appointmentTable");
+            // Remove all rows but the first
+            while (table.rows.length > 1) {
+                table.deleteRow(1);
+            }
+            for (appointment of JSON.parse(data.appointments)){
+                var row = table.insertRow();
+                row.dataset.dentistSin = appointment[1];
+                row.dataset.patientSin = appointment[0];
+                var drNameCell = row.insertCell();
+                drNameCell.innerHTML = appointment[23] + " " + appointment[24] + " " + appointment[25];
+                var ptNameCell = row.insertCell();
+                ptNameCell.innerHTML = appointment[9] + " " + appointment[10] + " " + appointment[11];
+                var ptPronouns = row.insertCell();
+                ptPronouns.innerHTML = appointment[13];
+                var dateCell = row.insertCell();
+                dateCell.innerHTML = appointment[2];
+                var startTime = row.insertCell();
+                startTime.innerHTML = appointment[3];
+                var endTime = row.insertCell();
+                endTime.innerHTML = appointment[4];
+                var type = row.insertCell();
+                type.innerHTML = appointment[5];
+                var status = row.insertCell();
+                status.innerHTML = appointment[6];
+                var room = row.insertCell();
+                room.innerHTML = appointment[7];
+
+            }
+            for (var i = 1; i < table.rows.length; i++) {
+                for (var i = 1; i < table.rows.length; i++) {
+                table.rows[i].addEventListener("click", function(){
+                    
+                    document.getElementById("appointmentView").style.display = "none";
+                    document.getElementById("app").style.display = "none";
+                    document.getElementById("addAppointmentView").style.display = "block";
+
+                    var patientSinAppointment = document.getElementById("patientSinAppointment").value = this.dataset.patientSin;
+                    var doctorSinAppointment = document.getElementById("doctorSinAppointment").value = this.dataset.dentistSin;
+                    var dateAppointment = document.getElementById("dateAppointment").value = this.cells[3].innerHTML;
+                    var startTimeAppointment = document.getElementById("startTimeAppointment").value = this.cells[4].innerHTML;
+                    var endTimeAppointment = document.getElementById("endTimeAppointment").value = this.cells[5].innerHTML;
+                    var appointmentTypeAppointment = document.getElementById("appointmentTypeAppointment").value = this.cells[6].innerHTML;
+                    var appointmentStatusAppointment = document.getElementById("appointmentStatusAppointment").value = this.cells[7].innerHTML;
+                    var roomAssignedAppointment = document.getElementById("roomAssignedAppointment").value =  this.cells[8].innerHTML;
+
+                    var submitAppointmentBtn = document.getElementById("submitAppointment").innerHTML = "Update Appointment";
+                    });
+                }
+            }
+        }
+        if (data.type == "employees"){
+            var table = document.getElementById("employeeTable");
+            // Remove all rows but the first
+            while (table.rows.length > 1) {
+                table.deleteRow(1);
+            }
+            for (employee of data.employees){
+                var row = table.insertRow();
+                row.dataset.employeeSin = employee[0];
+                var nameCell = row.insertCell();
+                nameCell.innerHTML = employee[5] + " " + employee[6] + " " + employee[7];
+                var roleCell = row.insertCell();
+                roleCell.innerHTML = employee[1];
+                var salaryCell = row.insertCell();
+                salaryCell.innerHTML = employee[3];
+                var branchCell = row.insertCell();
+                branchCell.innerHTML = employee[2];
+            }
+        }
+    });
+</script>
+</html>

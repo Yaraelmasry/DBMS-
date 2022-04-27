@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet"> 
+    <style>
+        body{
+            background-image:url('./ezbg.jpg');
+            background-size:cover;
+            background-repeat:no-repeat;
+            
+        }
+        #loginDiv h1{
+            font-family: 'Oswald', sans-serif;
+            color:white;
+        }
+        #loginDiv button{
+            text-decoration: none;
+            font-family: 'Oswald', sans-serif;
+            color:white;
+            background-color:lightgreen;
+            border:none;
+            border-radius:10px;
+            padding: 15px 68px;
+        }
+        #loginDiv select{
+            font-family: 'Oswald', sans-serif;
+            color:white;
+            background-color:lightgreen;
+            border:none;
+            border-radius:10px;
+            padding: 15px 32px;
+        }
+        #loginDiv{
+            text-align: center;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 15vh;
+            padding: 20px;
+            background-color: gray;
+            width: 20%;
+            border-radius: 100px;
+        }
+        #username{
+            text-align: center;
+            display: block;   
+            margin: 1em auto;
+        }
+        #password{
+            text-align: center;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+
+        }
+        #loginButton{
+            text-align: center;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 1em;
+        }
+        #role{
+            text-align: center;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 1em;
+        }
+    </style>
+</head>
+<body>
+    <div id='loginDiv'>
+        <h1>Login</h1>
+        <input type="text" id="username" placeholder="Username"></input>
+        <input type="password" id="password" placeholder="Password"></input>
+        <!-- Role Select -->
+        <select id="role">
+            <option value="Receptionist">Receptionist</option>
+            <option value="Doctor">Hygenist</option>
+            <option value="Doctor">Dentist</option>
+            <option value="Patient">Patient</option>
+        </select>
+        <button id="loginButton" type="button">Login</button>
+    </div>
+
+</body>
+<script>
+    var socket = new WebSocket('ws://localhost:4000');
+    document.getElementById("loginButton").addEventListener("click", function(){
+        var username = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
+        var role = document.getElementById("role").value;
+        socket.send(JSON.stringify({
+            type: "login",
+            username: username,
+            password: password,
+            role: role
+        }));
+        document.getElementById("loginButton").innerHTML = "Logging in...";
+        document.getElementById("loginButton").style.color = "grey";
+    });
+    socket.addEventListener('message', function(event){
+        var data = JSON.parse(event.data);
+        console.log(data);
+        if(data.type == "redirect"){
+            window.location.href = window.location.href + data.path;
+        }
+    });
+
+</script>
+</html>
